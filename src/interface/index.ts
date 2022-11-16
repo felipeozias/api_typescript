@@ -1,6 +1,20 @@
 interface IStatusResponse<T> {
-    status: Number;
+    status: number;
     response: T;
 }
 
-export { IStatusResponse };
+interface IUserDataToken {
+    userId: string;
+    userEmail: string;
+    userName: string;
+    userAdmin: string;
+    userFirstName: string;
+    userLastName: string;
+}
+
+interface ILogin {
+    email: string;
+    password: string;
+}
+
+export { IStatusResponse, IUserDataToken, ILogin };
