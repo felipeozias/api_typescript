@@ -10,6 +10,7 @@ interface IUserDataToken {
     userAdmin: string;
     userFirstName: string;
     userLastName: string;
+    squadName: any;
 }
 
 interface ILogin {
