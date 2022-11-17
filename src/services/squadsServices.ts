@@ -49,4 +49,30 @@ export default class SquadServices {
         }
         return result;
     }
+
+    async addMember(idTeam: String, idUser: String) {
+        let result: IResult = { data: [], error: "", status: 200 };
+
+        try {
+            if (UuidValidator.validator(idTeam) !== null) {
+                result.error = "Invalid team id";
+                result.status = 400;
+                return result;
+            }
+    
+            if (UuidValidator.validator(idUser) !== null) {
+                result.error = "Invalid user id";
+                result.status = 400;
+                return result;
+            }
+            const userRepository = new Users();
+            result = await userRepository.addSquad(idUser, idTeam);
+            
+        } catch (error) {
+            result.error = error as string;
+            result.status = 500;            
+        }
+        return result;
+        
+    }
 }
