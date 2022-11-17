@@ -9,4 +9,5 @@ router.get("/teams", squads.getAll);
 router.get("/teams/:team", squads.getSquad);
 router.post("/team", squads.postSquad);
 
+router.delete("/team/:team_id/member/:user_id", squads.removeMember);
 export { router };
