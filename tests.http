@@ -6,7 +6,7 @@ GET http://localhost:8000/teams
 content-type: application/json
 ###
 
-GET http://localhost:8000/teams/A
+GET http://localhost:8000/teams/dd2dj92jdj298jd982j8d92j98dj892jd892j89dj892d
 content-type: application/json
 ###
 
@@ -14,7 +14,7 @@ POST http://localhost:8000/team/
 content-type: application/json
 
 {
-    "name": "SquadTest",
+    "name": "TestSquad1",
     "leader_id": "0774a578-65fb-4313-8b7d-79412501e1be"
 }
 ###

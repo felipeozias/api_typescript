@@ -1,3 +1,4 @@
+import {v4 as uuidv4} from "uuid";
 import connectDB from "../database/index";
 import { IStatusResponse } from "../interface";
 import IResult from "../interface/iresult";
@@ -29,10 +30,10 @@ export default class Squads {
         }
     }
 
-    async getSquad(squadName: String) {
+    async getSquad(squadId: String) {
         try {
-            const getSquad = await this._db.pool.query(`SELECT * FROM squads WHERE name = $1`, [squadName]);
-
+            const getSquad = await this._db.pool.query(`SELECT * FROM squads WHERE id = $1`, [squadId]);
+            
             console.log(getSquad.rows);
 
             const res: IStatusResponse<Array<{}>> = {
@@ -51,8 +52,12 @@ export default class Squads {
 
     async postSquad(name: String, leader_id: String) {
         try {
-            let queryText = "INSERT INTO squads (name,leader_id) VALUES ($1, $2) RETURNING *";
-            let queryValue = [name, leader_id];
+            const id = uuidv4();
+            const date = new Date();
+            const created_at = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+
+            const queryText = "INSERT INTO squads (id, name, leader_id, created_at) VALUES ($1, $2, $3, $4) RETURNING *";
+            const queryValue = [id, name, leader_id, created_at];
 
             const postSquad = await this._db.pool.query(queryText, queryValue);
 
