@@ -1,4 +1,4 @@
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import connectDB from "../database/index";
 import { IStatusResponse } from "../interface";
 import IResult from "../interface/iresult";
@@ -32,9 +32,12 @@ export default class Squads {
 
     async getSquad(squadId: String) {
         try {
-            const getSquad = await this._db.pool.query(`SELECT * FROM squads WHERE id = $1`, [squadId]);
-            
-            console.log(getSquad.rows);
+            const getSquad = await this._db.pool.query(
+                `SELECT * FROM squads WHERE id = $1`,
+                [squadId]
+            );
+
+            //console.log(getSquad.rows);
 
             const res: IStatusResponse<Array<{}>> = {
                 status: 200,
@@ -54,9 +57,12 @@ export default class Squads {
         try {
             const id = uuidv4();
             const date = new Date();
-            const created_at = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+            const created_at = `${date.getFullYear()}-${
+                date.getMonth() + 1
+            }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
-            const queryText = "INSERT INTO squads (id, name, leader_id, created_at) VALUES ($1, $2, $3, $4) RETURNING *";
+            const queryText =
+                "INSERT INTO squads (id, name, leader_id, created_at) VALUES ($1, $2, $3, $4) RETURNING *";
             const queryValue = [id, name, leader_id, created_at];
 
             const postSquad = await this._db.pool.query(queryText, queryValue);
@@ -82,7 +88,8 @@ export default class Squads {
 
         try {
             const now = new Date();
-            let query = "UPDATE squads SET name = $2, leader_id = $3, updated_at = $4 WHERE id = $1 RETURNING *";
+            let query =
+                "UPDATE squads SET name = $2, leader_id = $3, updated_at = $4 WHERE id = $1 RETURNING *";
             let values = [squad.id, squad.name, squad.idLeader, now];
             const data = await this._db.pool.query(query, values);
             if (data.rowCount > 0) {
