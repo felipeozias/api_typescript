@@ -13,9 +13,11 @@ router.use(authControllers.verifyAuth);
 router.get("/users/me", users.getMe);
 router.get("/teams/:team", squads.getSquad);
 
+
 /* Admin e lider */
 router.use(authControllers.verifyAdminOrLead);
 router.get("/users/:user_id", users.getById);
+
 router.patch("/team/:team_id", squads.update);
 router.post("/team/:team_id/member/:user_id", squads.addMember);
 router.delete("/team/:team_id/member/:user_id", squads.removeMember);
@@ -25,5 +27,6 @@ router.use(authControllers.verifyAdmin);
 router.get("/users", users.getAll);
 router.get("/teams", squads.getAll);
 router.post("/team", squads.postSquad);
+router.delete("/team/:team_id", squads.deleteSquad);
 
 export { router };
