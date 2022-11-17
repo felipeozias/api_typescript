@@ -35,7 +35,7 @@ export default class UserServices {
         const squad = await this._squadService.getSquad(getUsers.data.squadId);
 
         getUsers.data.squad = {
-            squad: squad?.response,
+            squad: squad.data,
         };
 
         return getUsers;
@@ -79,7 +79,5 @@ export default class UserServices {
             result.status = 500;
         }
         return result;
-
     }
-
 }
