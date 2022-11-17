@@ -28,6 +28,8 @@ router.delete("/team/:team_id/member/:user_id", squads.removeMember);
 /* Admin */
 router.use(authControllers.verifyAdmin);
 router.get("/users", users.getAll);
+router.delete("/users/:user_id", users.deleteUser);
+
 router.get("/teams", squads.getAll);
 router.post("/team", squads.postSquad);
 router.delete("/team/:team_id", squads.deleteSquad);
