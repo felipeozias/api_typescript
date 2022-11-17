@@ -5,6 +5,12 @@ import { squads } from "../controllers/squadsControllers";
 const router = express.Router();
 
 router.get("/users", users.getAll);
+router.post("/users", users.createUser);
+
+
+
+
+
 router.get("/teams", squads.getAll);
 router.get("/teams/:team", squads.getSquad);
 router.post("/team", squads.postSquad);
