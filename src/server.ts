@@ -18,7 +18,9 @@ class App {
         this.app.listen(process.env.SRPORT, () => {
             console.log(`Server init in port ${process.env.SRPORT}`);
         });
+            
     }
 }
+
 
 const app = new App();
