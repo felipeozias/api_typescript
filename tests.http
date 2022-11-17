@@ -1,0 +1,20 @@
+GET http://localhost:8000/users 
+content-type: application/json
+###
+
+GET http://localhost:8000/teams 
+content-type: application/json
+###
+
+GET http://localhost:8000/teams/A
+content-type: application/json
+###
+
+POST http://localhost:8000/team/
+content-type: application/json
+
+{
+    "name": "SquadTest",
+    "leader_id": "0774a578-65fb-4313-8b7d-79412501e1be"
+}
+###
