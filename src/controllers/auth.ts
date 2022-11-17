@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
-import auth from "../auth/auth";
+import { Auth } from "../auth";
 import { ILogin } from "../interface";
 
-class AuthControllers {
-    constructor() {}
+class AuthControllers extends Auth {
+    constructor() {
+        super();
+    }
 
     async login(req: Request, res: Response) {
         const data: ILogin = req.body;
 
-        const user = await auth.createToken(data);
+        const user = await super.createToken(data);
 
         if (user.status != 200) {
             return res.status(user.status).json({ message: user.response });

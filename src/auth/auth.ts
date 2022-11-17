@@ -3,18 +3,17 @@ import jwt from "jsonwebtoken";
 import { ILogin, IUserDataToken } from "../interface";
 import Users from "../repositories/users";
 
-/* export default  */ class Auth {
+export abstract class Auth {
     private _jwt;
-    private _users: Users;
 
     constructor() {
         this._jwt = jwt;
-        this._users = new Users();
     }
 
-    public async createToken(data: ILogin) {
+    protected async createToken(data: ILogin) {
         const { email, password } = data;
-        const user = await this._users.getUserAuth(email);
+        const userMod = new Users();
+        const user = await userMod.getUserAuth(email);
 
         if (user.status > 300)
             return { status: user.status, response: user.response };
@@ -83,4 +82,4 @@ import Users from "../repositories/users";
     }
 }
 
-export default new Auth();
+//export default new Auth();
