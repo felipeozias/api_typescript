@@ -50,8 +50,8 @@ export default class Users {
                 result.status = 404;
             }
             return result;
-        } catch (err) {
-            result.error = err as string;
+        } catch (err: any) {
+            result.error = err.detail as string;
             result.status = 500;
             return result;
         }
@@ -83,8 +83,8 @@ export default class Users {
                 result.status = 404;
             }
             return result;
-        } catch (err) {
-            result.error = err as string;
+        } catch (err: any) {
+            result.error = err.detail as string;
             result.status = 500;
             return result;
         }

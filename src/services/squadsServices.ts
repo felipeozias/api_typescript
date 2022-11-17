@@ -1,8 +1,10 @@
 import { IStatusResponse } from "../interface";
 import Squads from "../repositories/squads";
+import Squad from "../model/squad";
 import Users from "../repositories/users";
 import IResult from "../interface/iresult";
 import UuidValidator from "../validators/uuid-validator";
+import StringValitador from "../validators/string-validator";
 
 export default class SquadServices {
     private _squad: Squads;
@@ -25,6 +27,23 @@ export default class SquadServices {
         return postSquad;
     }
 
+    async update(squad: Squad) {
+        let result: IResult = { data: [], error: "", status: 200 };
+
+        try {
+            if (squad.validate() !== null) {
+                result.error = squad.validate() as string;
+                result.status = 400;
+                return result;
+            }
+            result = await this._squad.update(squad);
+        } catch (error) {
+            result.error = error as string;
+            result.status = 500;
+        }
+        return result;
+    }
+
     async removeMember(idTeam: String, idUser: String) {
         let result: IResult = { data: [], error: "", status: 200 };
 
@@ -34,7 +53,7 @@ export default class SquadServices {
                 result.status = 400;
                 return result;
             }
-    
+
             if (UuidValidator.validator(idUser) !== null) {
                 result.error = "Invalid user id";
                 result.status = 400;
@@ -42,10 +61,9 @@ export default class SquadServices {
             }
             const userRepository = new Users();
             result = await userRepository.removeSquad(idUser);
-            
         } catch (error) {
             result.error = error as string;
-            result.status = 500;            
+            result.status = 500;
         }
         return result;
     }
@@ -59,7 +77,7 @@ export default class SquadServices {
                 result.status = 400;
                 return result;
             }
-    
+
             if (UuidValidator.validator(idUser) !== null) {
                 result.error = "Invalid user id";
                 result.status = 400;
@@ -67,12 +85,10 @@ export default class SquadServices {
             }
             const userRepository = new Users();
             result = await userRepository.addSquad(idUser, idTeam);
-            
         } catch (error) {
             result.error = error as string;
-            result.status = 500;            
+            result.status = 500;
         }
         return result;
-        
     }
 }
