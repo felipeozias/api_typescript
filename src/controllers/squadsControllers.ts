@@ -21,57 +21,42 @@ class squadControllers {
     }
 
     async getSquad(req: Request, res: Response) {
+        const idSquad = req.params["team"];
         const squadServices = new SquadServices();
-        const squads: any = await squadServices.getSquad(req.params["team"]);
-        
-        if (req.params["team"].length < 36 ) {
-            res.status(400).send(`[ERROR]: Id inválido`);
+        const result = await squadServices.getSquad(idSquad);
 
-        } else if (squads == undefined) {
-            res.status(400).send(`[ERROR]: Id não encontrado`);
-            
-        } else {
-            if (squads.status > 300) {
-                return res.status(squads.status).json({
-                    message: squads.response,
-                });
-            }
-            
-            res.status(200).json(squads.response);
+        if (result.status > 300) {
+            return res.status(result.status).json({ message: result.error });
         }
-
-
+        
+        res.status(200).json(result.data);
     }
 
     async postSquad(req: Request, res: Response) {
+        const squad = new Squad();
+        squad.name = req.body["name"];
+        squad.idLeader = req.body["leader_id"];
+
         const squadServices = new SquadServices();
-        
+        const result = await squadServices.postSquad(squad);
 
-        if (req.body["name"].length == 0) {
-            res.status(400).send(`[ERROR]: Parametro name vazio`);
-
-        } else if (req.body["leader_id"].length == 0) {
-            res.status(400).send(`[ERROR]: Parametro leader id vazio`);
-
-        } else {
-            const squads: any = await squadServices.postSquad(req.body["name"], req.body["leader_id"]);
-
-            if (squads == undefined) {
-                res.status(400).send(`[ERROR]: Leader id não encontrado ou Nome da squad repetido!`);
-            } else {
-                if (squads.status > 300) {
-                    return res.status(squads.status).json({
-                        message: squads.response,
-                    });
-                }
-                
-                res.status(200).json(squads.response);
-            }
-
+        if (result.status > 300) {
+            return res.status(result.status).json({ message: result.error });
         }
+        res.status(200).json(result.data);
+    }
 
+    async deleteSquad(req: Request, res: Response) {
         
+        const idTeam = req.params["team_id"];
+        const squadServices = new SquadServices();
+        const result = await squadServices.deleteSquad(idTeam);
 
+        if (result.status > 300) {
+            return res.status(result.status).json({ message: result.error });
+        }
+        
+        res.status(200).json(result.data);
     }
 
     async update(req: Request, res: Response) {

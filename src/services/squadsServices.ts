@@ -17,14 +17,56 @@ export default class SquadServices {
         return getSquads;
     }
 
-    async getSquad(squadName: String) {
-        const getSquad: IStatusResponse<Array<{}> | any> | undefined = await this._squad.getSquad(squadName);
-        return getSquad;
+    async getSquad(idSquad: String) {
+        let result: IResult = { data: [], error: "", status: 200 };
+        try {
+            if (UuidValidator.validator(idSquad) !== null) {
+                result.error = "Invalid team id";
+                result.status = 400;
+                return result;
+            }
+
+            result = await this._squad.deleteSquad(idSquad);
+        } catch (error) {
+            result.error = error as string;
+            result.status = 500;
+        }
+        return result;
     }
 
-    async postSquad(param1: String, param2: String) {
-        const postSquad: IStatusResponse<Array<{}> | any> | undefined = await this._squad.postSquad(param1, param2);
-        return postSquad;
+    async postSquad(squad: Squad) {
+        let result: IResult = { data: [], error: "", status: 200 };
+
+        try {
+            if (squad.validate() !== null) {
+                result.error = squad.validate() as string;
+                result.status = 400;
+                return result;
+            }
+            result = await this._squad.postSquad(squad);
+        } catch (error) {
+            result.error = error as string;
+            result.status = 500;
+        }
+        return result;
+    }
+
+    async deleteSquad(idTeam: String) {
+        let result: IResult = { data: [], error: "", status: 200 };
+        
+        try {
+            if (UuidValidator.validator(idTeam) !== null) {
+                result.error = "Invalid team id";
+                result.status = 400;
+                return result;
+            }
+
+            result = await this._squad.deleteSquad(idTeam);
+        } catch (error) {
+            result.error = error as string;
+            result.status = 500;
+        }
+        return result;
     }
 
     async update(squad: Squad) {
