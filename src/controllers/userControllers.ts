@@ -105,6 +105,23 @@ class UserControllers {
     }
 
 
+    async deleteUser (req: Request, res: Response) {
+
+        const userServices = new UserServices();
+
+        const user = new User();
+        user.id = req.params.user_id;
+        
+        const result = await userServices.delete(user.id);
+
+        if (result.status > 300) {
+            return res.status(result.status).json({ message: result.error });
+        }
+        
+        res.status(200).json(result.data);    
+   }
+
+
 
 
 }
