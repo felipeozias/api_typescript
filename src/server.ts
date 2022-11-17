@@ -11,16 +11,14 @@ class App {
         this.app = express();
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
-        this.app.use(router);
         this.app.use(cookieParser());
         this.app.use(cors());
+        this.app.use(router);
 
         this.app.listen(process.env.SRPORT, () => {
             console.log(`Server init in port ${process.env.SRPORT}`);
         });
-            
     }
 }
-
 
 const app = new App();

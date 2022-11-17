@@ -7,6 +7,7 @@ const router = express.Router();
 
 // Public
 router.post("/login", authControllers.login);
+router.post("/users", users.createUser);
 
 // Admin, Líderes, Funcionário
 router.use(authControllers.verifyAuth);

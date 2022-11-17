@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { ILogin, IUserDataToken } from "../interface";
 import Users from "../repositories/users";
-import SquadServices from "../services/squadsServices";
+import crypto from "crypto";
 
 export abstract class Auth {
     private _jwt;
@@ -16,10 +16,15 @@ export abstract class Auth {
         const userMod = new Users();
         const user = await userMod.getUserAuth(email);
 
+        const passwordHash = crypto
+            .createHash("sha256")
+            .update(password)
+            .digest("hex");
+
         if (user.status > 300)
             return { status: user.status, response: user.error };
 
-        if (password != user.data.password) {
+        if (passwordHash != user.data.password) {
             return { status: 401, response: "Password invalid!" };
         }
 
@@ -88,5 +93,3 @@ export abstract class Auth {
         next();
     }
 }
-
-//export default new Auth();
