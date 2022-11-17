@@ -63,4 +63,23 @@ export default class UserServices {
         }
         return result;
     }
+
+    async update(user: User) {
+        let result: IResult = { data: [], error: "", status: 200 };
+
+        try {
+            if (user.validate() !== null) {
+                result.error = user.validate() as string;
+                result.status = 400;
+                return result;
+            }
+            result = await this._user.update(user);
+        } catch (error) {
+            result.error = error as string;
+            result.status = 500;
+        }
+        return result;
+
+    }
+
 }

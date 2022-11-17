@@ -79,6 +79,34 @@ class UserControllers {
             });
         }
     }
+
+
+    async updateUser(req: Request, res: Response) {
+
+        const userServices = new UserServices();
+
+
+        const user = new User();
+        user.id = req.params.user_id;
+        user.username = req.body.username;
+        user.email = req.body.email;
+        user.firstName = req.body.first_name;
+        user.lastName = req.body.last_name;
+        user.password = req.body.password;
+        user.type = req.body.is_admin;
+
+        
+        const result = await userServices.update(user);
+
+        if (result.status > 300) {
+            return res.status(result.status).json({ message: result.error });
+        }
+        res.status(200).json(result.data);
+    }
+
+
+
+
 }
 
 const users = new UserControllers();
