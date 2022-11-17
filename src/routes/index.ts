@@ -8,6 +8,9 @@ const router = express.Router();
 // Public
 router.post("/login", authControllers.login);
 
+// Usuário
+router.patch("/users/:user_id", users.updateUser);
+
 // Admin, Líderes, Funcionário
 router.use(authControllers.verifyAuth);
 router.get("/users/me", users.getMe);
