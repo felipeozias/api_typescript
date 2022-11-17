@@ -16,6 +16,7 @@ class UserControllers {
 
         res.status(200).json(users.response);
     }
+    
 }
 
 const users = new UserControllers();
