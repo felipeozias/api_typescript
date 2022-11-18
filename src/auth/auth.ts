@@ -17,13 +17,9 @@ export abstract class Auth {
         const userMod = new Users();
         const user = await userMod.getUserAuth(email);
 
-        const passwordHash = crypto
-            .createHash("sha256")
-            .update(password)
-            .digest("hex");
+        const passwordHash = crypto.createHash("sha256").update(password).digest("hex");
 
-        if (user.status > 300)
-            return { status: user.status, response: user.error };
+        if (user.status > 300) return { status: user.status, response: user.error };
 
         if (passwordHash != user.data.password) {
             return { status: 401, response: "Password invalid!" };
@@ -70,24 +66,21 @@ export abstract class Auth {
         });
     }
 
-    public async verifyAdminOrLead(
-        req: any,
-        res: Response,
-        next: NextFunction
-    ) {
+    public async verifyAdminOrLead(req: any, res: Response, next: NextFunction) {
         const squad = new Squads();
-        const userSquad = await squad.getSquad(req.body.squadId);
+        //console.log(req.body.squadId);
+        //const userSquad = await squad.getSquad(req.body.squadId);
 
         if (req.body.userAdmin != "admin" && req.body.userAdmin != "lider") {
             return res.status(401).end();
         }
 
-        if (
+        /*if (
             req.body.userAdmin == "lider" &&
             userSquad.data.idLeader != req.body.userId
         ) {
             return res.status(401).end();
-        }
+        }*/
 
         next();
     }

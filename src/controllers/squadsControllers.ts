@@ -1,4 +1,4 @@
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { Request, Response } from "express";
 import SquadServices from "../services/squadsServices";
 import User from "../model/user";
@@ -28,7 +28,7 @@ class squadControllers {
         if (result.status > 300) {
             return res.status(result.status).json({ message: result.error });
         }
-        
+
         res.status(200).json(result.data);
     }
 
@@ -47,7 +47,6 @@ class squadControllers {
     }
 
     async deleteSquad(req: Request, res: Response) {
-        
         const idTeam = req.params["team_id"];
         const squadServices = new SquadServices();
         const result = await squadServices.deleteSquad(idTeam);
@@ -55,7 +54,7 @@ class squadControllers {
         if (result.status > 300) {
             return res.status(result.status).json({ message: result.error });
         }
-        
+
         res.status(200).json(result.data);
     }
 
@@ -64,6 +63,10 @@ class squadControllers {
         squad.id = req.params["team_id"];
         squad.name = req.body["name"];
         squad.idLeader = req.body["leader"];
+
+        if (req.body.userAdmin !== "admin" && req.body.userAdmin === "lider" && req.body.squadId !== squad.id) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
 
         const squadServices = new SquadServices();
         const result = await squadServices.update(squad);
@@ -78,6 +81,10 @@ class squadControllers {
         const idTeam = req.params["team_id"];
         const idUser = req.params["user_id"];
 
+        if (req.body.userAdmin !== "admin" && req.body.userAdmin === "lider" && req.body.squadId !== idTeam) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
         const squadServices = new SquadServices();
         const result = await squadServices.removeMember(idTeam, idUser);
 
@@ -91,6 +98,10 @@ class squadControllers {
     async addMember(req: Request, res: Response) {
         const idTeam = req.params["team_id"];
         const idUser = req.params["user_id"];
+
+        if (req.body.userAdmin !== "admin" && req.body.userAdmin === "lider" && req.body.squadId !== idTeam) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
 
         const squadServices = new SquadServices();
         const result = await squadServices.addMember(idTeam, idUser);
