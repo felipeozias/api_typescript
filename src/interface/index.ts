@@ -11,6 +11,7 @@ interface IUserDataToken {
     userFirstName: string;
     userLastName: string;
     squadName: any;
+    squadId: string;
 }
 
 interface ILogin {

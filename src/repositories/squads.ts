@@ -32,9 +32,8 @@ export default class Squads {
 
     async getSquad(idSquad: String) {
         const result: IResult = { data: [], error: "", status: 200 };
-        
-        try {
 
+        try {
             const queryText = "SELECT * FROM squads WHERE id = $1 RETURNING *";
             const queryValue = [idSquad];
             const data = await this._db.pool.query(queryText, queryValue);
@@ -64,7 +63,8 @@ export default class Squads {
         try {
             const now = new Date();
             squad.id = uuidv4();
-            const queryText = "INSERT INTO squads (id, name, leader_id, created_at) VALUES ($1, $2, $3, $4) RETURNING *";
+            const queryText =
+                "INSERT INTO squads (id, name, leader_id, created_at) VALUES ($1, $2, $3, $4) RETURNING *";
             const queryValue = [squad.id, squad.name, squad.idLeader, now];
             const data = await this._db.pool.query(queryText, queryValue);
             if (data.rowCount > 0) {
@@ -87,11 +87,9 @@ export default class Squads {
         }
     }
 
- 
-
     async deleteSquad(idTeam: String) {
         const result: IResult = { data: [], error: "", status: 200 };
-        
+
         try {
             const queryText = "DELETE FROM squads WHERE id = $1 RETURNING *";
             const queryValue = [idTeam];
