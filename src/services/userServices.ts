@@ -80,9 +80,7 @@ export default class UserServices {
             result.status = 500;
         }
         return result;
-
     }
-
 
     async delete(user_id: String) {
         let result: IResult = { data: [], error: "", status: 200 };
@@ -101,5 +99,4 @@ export default class UserServices {
         }
         return result;
     }
-
 }
