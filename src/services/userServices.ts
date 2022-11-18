@@ -36,7 +36,7 @@ export default class UserServices {
         const squad = await this._squadService.getSquad(getUsers.data.squadId);
 
         getUsers.data.squad = {
-            squad: squad.data
+            squad: squad.data,
         };
 
         return getUsers;
@@ -84,7 +84,7 @@ export default class UserServices {
 
     async delete(user_id: String) {
         let result: IResult = { data: [], error: "", status: 200 };
-        
+
         try {
             if (UuidValidator.validator(user_id) !== null) {
                 result.error = "Invalid team id";

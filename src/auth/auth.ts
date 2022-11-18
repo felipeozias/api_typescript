@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { ILogin, IUserDataToken } from "../interface";
 import Users from "../repositories/users";
-import SquadServices from "../services/squadsServices";
+import crypto from "crypto";
+import Squads from "../repositories/squads";
 
 export abstract class Auth {
     private _jwt;
@@ -16,10 +17,15 @@ export abstract class Auth {
         const userMod = new Users();
         const user = await userMod.getUserAuth(email);
 
+        const passwordHash = crypto
+            .createHash("sha256")
+            .update(password)
+            .digest("hex");
+
         if (user.status > 300)
             return { status: user.status, response: user.error };
 
-        if (password != user.data.password) {
+        if (passwordHash != user.data.password) {
             return { status: 401, response: "Password invalid!" };
         }
 
@@ -31,6 +37,7 @@ export abstract class Auth {
             userFirstName: user.data.firstName,
             userLastName: user.data.lastName,
             squadName: "Sem equipe",
+            squadId: user.data.squadId,
         };
 
         if (!user.data.squadId == false) {
@@ -57,13 +64,28 @@ export abstract class Auth {
             req.body.userLastName = decoded.userLastName;
             req.body.userEmail = decoded.userEmail;
             req.body.squad = decoded.squadName;
+            req.body.squadId = decoded.squadId;
 
             next();
         });
     }
 
-    public verifyAdminOrLead(req: any, res: Response, next: NextFunction) {
+    public async verifyAdminOrLead(
+        req: any,
+        res: Response,
+        next: NextFunction
+    ) {
+        const squad = new Squads();
+        const userSquad = await squad.getSquad(req.body.squadId);
+
         if (req.body.userAdmin != "admin" && req.body.userAdmin != "lider") {
+            return res.status(401).end();
+        }
+
+        if (
+            req.body.userAdmin == "lider" &&
+            userSquad.data.idLeader != req.body.userId
+        ) {
             return res.status(401).end();
         }
 
@@ -79,14 +101,12 @@ export abstract class Auth {
     }
 
     public verifyMe(req: any, res: Response, next: NextFunction) {
-        const params = req.params.userId;
+        const params = req.params.user_id;
 
-        if (req.userId != params) {
+        if (req.body.userId != params) {
             return res.status(401);
         }
 
         next();
     }
 }
-
-//export default new Auth();

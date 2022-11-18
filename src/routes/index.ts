@@ -7,20 +7,19 @@ const router = express.Router();
 
 // Public
 router.post("/login", authControllers.login);
-
-// Usuário
-router.patch("/users/:user_id", users.updateUser);
+router.post("/users", users.createUser);
 
 // Admin, Líderes, Funcionário
 router.use(authControllers.verifyAuth);
 router.get("/users/me", users.getMe);
 router.get("/teams/:team", squads.getSquad);
 
+// Usuário
+router.patch("/users/:user_id", authControllers.verifyMe, users.updateUser);
 
 /* Admin e lider */
 router.use(authControllers.verifyAdminOrLead);
 router.get("/users/:user_id", users.getById);
-
 router.patch("/team/:team_id", squads.update);
 router.post("/team/:team_id/member/:user_id", squads.addMember);
 router.delete("/team/:team_id/member/:user_id", squads.removeMember);
