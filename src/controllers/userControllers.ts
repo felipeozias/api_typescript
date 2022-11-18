@@ -58,7 +58,7 @@ class UserControllers {
         user.firstName = req.body.first_name;
         user.lastName = req.body.last_name;
         user.password = req.body.password;
-        user.type = req.body.is_admin;
+        user.type = "funcionario";
 
         try {
             const result = await userServices.insert(user);
@@ -68,7 +68,7 @@ class UserControllers {
                     message: result.error,
                 });
             }
-            // return response
+
             return res.status(200).json({
                 message: "usuario criado",
                 user: result.data,
@@ -80,11 +80,8 @@ class UserControllers {
         }
     }
 
-
     async updateUser(req: Request, res: Response) {
-
         const userServices = new UserServices();
-
 
         const user = new User();
         user.id = req.params.user_id;
@@ -93,9 +90,7 @@ class UserControllers {
         user.firstName = req.body.first_name;
         user.lastName = req.body.last_name;
         user.password = req.body.password;
-        user.type = req.body.is_admin;
 
-        
         const result = await userServices.update(user);
 
         if (result.status > 300) {
@@ -104,26 +99,20 @@ class UserControllers {
         res.status(200).json(result.data);
     }
 
-
-    async deleteUser (req: Request, res: Response) {
-
+    async deleteUser(req: Request, res: Response) {
         const userServices = new UserServices();
 
         const user = new User();
         user.id = req.params.user_id;
-        
+
         const result = await userServices.delete(user.id);
 
         if (result.status > 300) {
             return res.status(result.status).json({ message: result.error });
         }
-        
-        res.status(200).json(result.data);    
-   }
 
-
-
-
+        res.status(200).json(result.data);
+    }
 }
 
 const users = new UserControllers();
