@@ -4,6 +4,7 @@ import Users from "../repositories/users";
 import SquadServices from "./squadsServices";
 import User from "../model/user";
 import crypto from "crypto";
+import UuidValidator from "../validators/uuid-validator";
 
 export default class UserServices {
     private _user: Users;
@@ -35,7 +36,7 @@ export default class UserServices {
         const squad = await this._squadService.getSquad(getUsers.data.squadId);
 
         getUsers.data.squad = {
-            squad: squad.data,
+            squad: squad.data
         };
 
         return getUsers;
@@ -74,6 +75,24 @@ export default class UserServices {
                 return result;
             }
             result = await this._user.update(user);
+        } catch (error) {
+            result.error = error as string;
+            result.status = 500;
+        }
+        return result;
+    }
+
+    async delete(user_id: String) {
+        let result: IResult = { data: [], error: "", status: 200 };
+        
+        try {
+            if (UuidValidator.validator(user_id) !== null) {
+                result.error = "Invalid team id";
+                result.status = 400;
+                return result;
+            }
+
+            result = await this._user.delete(user_id);
         } catch (error) {
             result.error = error as string;
             result.status = 500;
